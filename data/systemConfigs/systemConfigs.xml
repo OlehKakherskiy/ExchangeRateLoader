@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<systemConfigs>
+    <actionList>
+        <action id="1">
+            <class>клас1</class>
+            <viewID>вью1</viewID>
+            <validatorID>вал1</validatorID>
+        </action>
+    </actionList>
+    <viewList>
+        <view id="вью1ИД">
+            <source>с1</source>
+            <class>кл1</class>
+            <style>стиль1</style>
+        </view>
+    </viewList>
+    <validatorList>
+        <validator id="SystemValidator">validators.SystemValidator</validator>
+    </validatorList>
+    <exchangesToShow>
+        <exchange id="1">USD</exchange>
+        <exchange id="2">EUR</exchange>
+        <exchange id="3">RUB</exchange>
+    </exchangesToShow>
+    <actionBuilder>app.ActionBuilder</actionBuilder>
+    <actionFactory>app.ActionFactory</actionFactory>
+    <viewFactory>app.ViewFactory</viewFactory>
+    <validatorFactory>app.ValidatorFactory</validatorFactory>
+</systemConfigs>
