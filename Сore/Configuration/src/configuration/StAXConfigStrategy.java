@@ -24,6 +24,7 @@ class StAXConfigStrategy implements ConfigStrategyImpl {
     private Stack<String> tagStack;
 
     private boolean prevClosedTag;
+
     private boolean wasRemoved;
 
     @Override
@@ -94,13 +95,11 @@ class StAXConfigStrategy implements ConfigStrategyImpl {
             }
             else{
                 prevClosedTag = false;
-                System.out.println("бред");
             }
         }
     }
 
     private void readEndElement(XMLStreamReader reader){
-        System.out.println(reader.getLocalName());
         if(!wasRemoved && tagStack.peek().contains(reader.getLocalName())) {
             tagStack.pop();
             mapStack.pop();

@@ -1,9 +1,11 @@
 package app;
 
+import java.util.concurrent.Callable;
+
 /**
  * Created by User on 13.05.2015.
  */
-public abstract class AbstractAction implements Runnable {
+public abstract class AbstractAction implements Runnable, Callable {
 
     public Context getContext() {
         return context;
@@ -21,7 +23,7 @@ public abstract class AbstractAction implements Runnable {
         this.responseView = responseView;
     }
 
-    private Context context;
+    protected Context context;
 
     private AbstractView responseView;
 
@@ -29,4 +31,6 @@ public abstract class AbstractAction implements Runnable {
     public void run() {
     }
 
+    @Override
+    public Object call(){return null;}
 }

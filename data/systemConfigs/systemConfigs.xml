@@ -26,4 +26,8 @@
     <actionFactory>app.ActionFactory</actionFactory>
     <viewFactory>app.ViewFactory</viewFactory>
     <validatorFactory>app.ValidatorFactory</validatorFactory>
+    <binding>
+        <source>data/banksConfigs.xml</source>
+        <class>entity.BankList</class>
+    </binding>
 </systemConfigs>

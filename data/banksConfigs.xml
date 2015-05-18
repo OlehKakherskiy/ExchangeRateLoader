@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<banksConfigs>
+    <bankList>
+        <bank id="PrivatBank">
+            <name>Приват Банк</name>
+            <URL>https://privatbank.ua/ua/</URL>
+            <storage>PrivatBankCurrencyHistory.xml</storage>
+        </bank>
+        <bank id="OshadBank">
+            <name>АО Ощадбанк</name>
+            <URL>http://www.oschadbank.ua/ru/private/currency/currency_rates/</URL>
+            <storage>OshadBankCurrencyHistory.xml</storage>
+        </bank>
+        <bank id="UkrEksimBank">
+            <name>Укрексімбанк</name>
+            <URL>https://www.eximb.com/rus/personal/everyday/currency_exchange/</URL>
+            <storage>UkrEksimBankCurrencyHistory.xml</storage>
+        </bank>
+        <bank id="UkrGasBank">
+            <name>Укргазбанк</name>
+            <URL>http://www.ukrgasbank.com/ukr/currency/</URL>
+            <storage>UkrGasBankCurrencyHistory.xml</storage>
+        </bank>
+        <bank id="UkrSibBank">
+            <name>Укрсиббанк</name>
+            <URL>https://my.ukrsibbank.com/ru/personal/operations/currency_exchange/</URL>
+            <storage>UkrSibBankCurrencyHistory.xml</storage>
+        </bank>
+    </bankList>
+    <currencyList>
+        <currency>EUR</currency>
+        <currency>USD</currency>
+        <currency>RUB</currency>
+        <currency>RUR</currency>
+    </currencyList>
+</banksConfigs>

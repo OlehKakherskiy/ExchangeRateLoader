@@ -19,7 +19,7 @@ public class Context {
         this.context = context;
     }
 
-    public void addValue(String key, String value){
+    public void addValue(String key, Object value){
         context.put(key,value);
     }
 
