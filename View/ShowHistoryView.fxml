@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="112.0" prefWidth="556.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="viewController.ChooseHistoryParamsController">
+    <children>
+      <HBox layoutX="96.0" layoutY="56.0">
+         <children>
+              <RadioButton layoutX="54.0" layoutY="85.0" mnemonicParsing="false" text="неделя">
+                  <toggleGroup>
+                      <ToggleGroup fx:id="historyGroup" />
+                  </toggleGroup>
+               <HBox.margin>
+                  <Insets right="10.0" />
+               </HBox.margin>
+              </RadioButton>
+              <RadioButton layoutX="135.0" layoutY="85.0" mnemonicParsing="false" text="месяц" toggleGroup="$historyGroup">
+               <HBox.margin>
+                  <Insets right="10.0" />
+               </HBox.margin>
+            </RadioButton>
+              <RadioButton layoutX="215.0" layoutY="85.0" mnemonicParsing="false" text="3 месяца" toggleGroup="$historyGroup">
+               <HBox.margin>
+                  <Insets right="10.0" />
+               </HBox.margin>
+            </RadioButton>
+              <RadioButton layoutX="309.0" layoutY="85.0" mnemonicParsing="false" text="6 месяцев" toggleGroup="$historyGroup">
+               <HBox.margin>
+                  <Insets right="10.0" />
+               </HBox.margin>
+            </RadioButton>
+              <RadioButton layoutX="406.0" layoutY="85.0" mnemonicParsing="false" text="год" toggleGroup="$historyGroup">
+               <HBox.margin>
+                  <Insets right="10.0" />
+               </HBox.margin>
+            </RadioButton>
+              <RadioButton layoutX="466.0" layoutY="85.0" mnemonicParsing="false" text="всё время" toggleGroup="$historyGroup" />
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </HBox>
+        <Label layoutX="14.0" layoutY="51.0" text="Период">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+        <Button fx:id="showHistoryButton" layoutX="424.0" layoutY="78.0" mnemonicParsing="false" prefHeight="2.0" prefWidth="118.0" text="Показать историю" />
+        <Label layoutX="14.0" layoutY="14.0" text="Тип операции">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+        <CheckBox fx:id="buy" layoutX="214.0" layoutY="19.0" mnemonicParsing="false" text="покупка" />
+        <CheckBox fx:id="sale" layoutX="311.0" layoutY="19.0" mnemonicParsing="false" text="продажа" />
+    </children>
+</Pane>
