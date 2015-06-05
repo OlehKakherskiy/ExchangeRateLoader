@@ -12,8 +12,14 @@ public class Controller {
 
     private ExecutorService queue = Executors.newSingleThreadExecutor();
 
+    private static final Controller c = new Controller();
+
     public void addRequest(String actionID, Context c){
         AbstractAction action = ConfigFacade.getInstance().getActionBuilder().buildActionObject(actionID, c);
-//        queue.submit(action);
+        queue.submit(action);
+    }
+
+    public static Controller getController(){
+        return c;
     }
 }

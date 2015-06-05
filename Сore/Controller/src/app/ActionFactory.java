@@ -21,6 +21,7 @@ public class ActionFactory implements IActionFactory {
     public void configureFactory() {
         HashMap<String, Object> result = (HashMap<String, Object>) ConfigFacade.getInstance().getSystemProperty("actionList");
         for (String key : result.keySet()) {
+            result.put("needResponseView", key.contains("true") ? true : false);
             readyToInstanceActions.put(key.substring(key.indexOf('?') + 1), result.get(key));
         }
     }
@@ -39,8 +40,11 @@ public class ActionFactory implements IActionFactory {
             HashMap<String, Object> props = ((HashMap<String, Object>) readyToInstanceActions.get(ID));
             Class actionClass = Class.forName((String) props.get("class"));
             AbstractAction result = (AbstractAction) actionClass.newInstance();
-//            result.setResponseView(ConfigFacade.getInstance().getViewFactory().createView((String) props.get("viewID")));
-            //TODO: подключить установку вьюхи. Разобраться с тем, когда вьюха не нужна.
+            if ((Boolean) props.get("needResponseView") == true) {
+                if(props.get("responseView") == null)
+                    throw new RequestException(); //TODO:
+                result.setResponseView(ConfigFacade.getInstance().getViewFactory().createView((String) props.get("viewID")));
+            }
             result.setContext(c);
             return result;
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
@@ -51,8 +55,8 @@ public class ActionFactory implements IActionFactory {
 
     @Override
     public Map<String, Object> getActionProperties(String ID) throws RequestException {
-        Map<String,Object> result = (Map<String, Object>) readyToInstanceActions.get(ID);
-        if(result == null)
+        Map<String, Object> result = (Map<String, Object>) readyToInstanceActions.get(ID);
+        if (result == null)
             throw new RequestException();
         return result;
     }

@@ -1,36 +1,53 @@
 <?xml version="1.0"?>
 <systemConfigs>
     <actionList>
-        <action id="DefaultRowParser">
+        <action id="DefaultRowParser" needResponseView="false">
             <class>actions.DefaultRowParser</class>
             <validatorID>SystemValidator</validatorID>
         </action>
-        <action id="URLLoader">
+        <action id="URLLoader" needResponseView="false">
             <class>actions.UrlRateLoader</class>
             <validatorID>SystemValidator</validatorID>
         </action>
-        <action id="SaveExchangeRate">
+        <action id="SaveExchangeRate" needResponseView="false">
             <class>actions.SaveExchangeRateCommand</class>
             <validatorID>SystemValidator</validatorID>
         </action>
-        <action id="ReadExchangeRate">
+        <action id="ReadExchangeRate" needResponseView="false">
             <class>actions.ReadExchangeRateCommand</class>
             <validatorID>SystemValidator</validatorID>
         </action>
-        <action id="StartAction">
+        <action id="StartAction" needResponseView="true">
             <class>actions.StartAction</class>
             <validatorID>SystemValidator</validatorID>
+            <viewID>TableView</viewID>
         </action>
-        <action id="CalculateDifferenceCommand">
+        <action id="CalculateDifferenceCommand" needResponseView="false">
             <class>actions.CalculateDifferenceBetweenRates</class>
             <validatorID>SystemValidator</validatorID>
         </action>
+        <action id="ShowExchangeHistory">
+            <class>actions.ShowExchangeHistoryAction</class>
+            <validatorID>SystemValidator</validatorID>
+            <viewID>HistoryChartsView</viewID>
+        </action>
     </actionList>
     <viewList>
-        <view id="вью1ИД">
-            <source>с1</source>
-            <class>кл1</class>
-            <style>стиль1</style>
+        <view id="MainView">
+            <source>MainView.fxml</source>
+            <class>viewController.MainViewController</class>
+        </view>
+        <view id="TableView">
+            <source>exchangeRateTableView.fxml</source>
+            <class>viewController.TableViewController</class>
+        </view>
+        <view id="HistoryChartsView">
+            <source>LineChartsView.fxml</source>
+            <class>viewController.LineChartsPanel</class>
+        </view>
+        <view id="HistoryParamsPanel">
+            <source>ShowHistoryParamsView.fxml</source>
+            <class>viewController.ChooseHistoryParamsController</class>
         </view>
     </viewList>
     <validatorList>
