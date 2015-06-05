@@ -40,6 +40,7 @@ public class ConfigFacade {
     private ConfigFacade() {
         systemProperties = new HashMap<>();
         loadStartConfigs();
+
         try {
             loadConfigs(sysConfigsFile);
         } catch (ConfigException e) {
@@ -53,19 +54,7 @@ public class ConfigFacade {
 
     public void loadConfigs(File f) throws ConfigException {
         systemProperties = configStrategy.loadConfigs(f);
-        try {
-            actionBuilder = (IActionBuilder) Class.forName((String) getSystemProperty("actionBuilder")).newInstance();
-            viewFactory = (IViewFactory) Class.forName((String) getSystemProperty("viewFactory")).newInstance();
-            validatorFactory = (IValidatorFactory) Class.forName((String) getSystemProperty("validatorFactory")).newInstance();
-            actionFactory = (IActionFactory) Class.forName((String) getSystemProperty("actionFactory")).newInstance();
-            loadBanksConfigs();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        loadBanksConfigs();
     }
 
     public void storeConfigs(Map<String, Object> props) throws ConfigException {
@@ -96,14 +85,11 @@ public class ConfigFacade {
     private void loadBanksConfigs(){
         HashMap<String,String> bindConfigs = (HashMap<String, String>) getSystemProperty("binding");
         try {
-            System.out.println(Class.forName(bindConfigs.get("class")));
             JAXBContext jaxbContext = JAXBContext.newInstance(Class.forName(bindConfigs.get("class")));
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
             BankList bankList = (BankList) unmarshaller.unmarshal(new File(bindConfigs.get("source")));
             systemProperties.put("bankList",bankList);
-        } catch (JAXBException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (JAXBException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -122,6 +108,22 @@ public class ConfigFacade {
 
     public IActionFactory getActionFactory() {
         return actionFactory;
+    }
+
+    public void setActionBuilder(IActionBuilder actionBuilder) {
+        this.actionBuilder = actionBuilder;
+    }
+
+    public void setViewFactory(IViewFactory viewFactory) {
+        this.viewFactory = viewFactory;
+    }
+
+    public void setValidatorFactory(IValidatorFactory validatorFactory) {
+        this.validatorFactory = validatorFactory;
+    }
+
+    public void setActionFactory(IActionFactory actionFactory) {
+        this.actionFactory = actionFactory;
     }
 
     public static void main(String[] args) {

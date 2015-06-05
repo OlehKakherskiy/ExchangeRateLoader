@@ -26,6 +26,7 @@ public class ValidatorFactory implements IValidatorFactory{
     }
 
     public ValidatorFactory() {
+        configureFactory();
     }
 
     private void configureFactory() {

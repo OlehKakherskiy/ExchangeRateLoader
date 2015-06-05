@@ -8,5 +8,5 @@ import validators.AbstractValidator;
  */
 public interface IValidatorFactory {
 
-    public AbstractValidator getValidator(String ID) throws RequestException;
+    AbstractValidator getValidator(String ID) throws RequestException;
 }

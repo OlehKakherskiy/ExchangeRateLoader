@@ -1,10 +1,29 @@
 <?xml version="1.0"?>
 <systemConfigs>
     <actionList>
-        <action id="1">
-            <class>клас1</class>
-            <viewID>вью1</viewID>
-            <validatorID>вал1</validatorID>
+        <action id="DefaultRowParser">
+            <class>actions.DefaultRowParser</class>
+            <validatorID>SystemValidator</validatorID>
+        </action>
+        <action id="URLLoader">
+            <class>actions.UrlRateLoader</class>
+            <validatorID>SystemValidator</validatorID>
+        </action>
+        <action id="SaveExchangeRate">
+            <class>actions.SaveExchangeRateCommand</class>
+            <validatorID>SystemValidator</validatorID>
+        </action>
+        <action id="ReadExchangeRate">
+            <class>actions.ReadExchangeRateCommand</class>
+            <validatorID>SystemValidator</validatorID>
+        </action>
+        <action id="StartAction">
+            <class>actions.StartAction</class>
+            <validatorID>SystemValidator</validatorID>
+        </action>
+        <action id="CalculateDifferenceCommand">
+            <class>actions.CalculateDifferenceBetweenRates</class>
+            <validatorID>SystemValidator</validatorID>
         </action>
     </actionList>
     <viewList>

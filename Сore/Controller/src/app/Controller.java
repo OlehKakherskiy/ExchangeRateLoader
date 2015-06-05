@@ -14,6 +14,6 @@ public class Controller {
 
     public void addRequest(String actionID, Context c){
         AbstractAction action = ConfigFacade.getInstance().getActionBuilder().buildActionObject(actionID, c);
-        queue.submit(action);
+//        queue.submit(action);
     }
 }

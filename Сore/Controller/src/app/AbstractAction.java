@@ -5,7 +5,7 @@ import java.util.concurrent.Callable;
 /**
  * Created by User on 13.05.2015.
  */
-public abstract class AbstractAction implements Runnable, Callable {
+public abstract class AbstractAction<V> implements Callable<V>, Runnable {
 
     public Context getContext() {
         return context;
@@ -31,6 +31,7 @@ public abstract class AbstractAction implements Runnable, Callable {
     public void run() {
     }
 
-    @Override
-    public Object call(){return null;}
+    public V call() throws Exception {
+        return null;
+    }
 }

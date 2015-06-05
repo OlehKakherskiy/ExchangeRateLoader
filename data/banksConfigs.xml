@@ -4,27 +4,109 @@
         <bank id="PrivatBank">
             <name>Приват Банк</name>
             <URL>https://privatbank.ua/ua/</URL>
-            <storage>PrivatBankCurrencyHistory.xml</storage>
+            <storage>data/banksStorage/PrivatBankCurrencyHistory.xml</storage>
+            <loadContext>
+                <property key="targetAttName">
+                    <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">id</value>
+                </property>
+                <property key="rowParserID">
+                    <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">DefaultRowParser</value>
+                </property>
+                <property key="targetAttValue">
+                    <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">course-table-pb</value>
+                </property>
+                <property key="targetTablePos">
+                    <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">1</value>
+                </property>
+            </loadContext>
         </bank>
         <bank id="OshadBank">
             <name>АО Ощадбанк</name>
             <URL>http://www.oschadbank.ua/ru/private/currency/currency_rates/</URL>
-            <storage>OshadBankCurrencyHistory.xml</storage>
+            <storage>data/banksStorage/OshadBankCurrencyHistory.xml</storage>
+            <loadContext>
+                <property key="targetAttName">
+                    <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">class</value>
+                </property>
+                <property key="rowParserID">
+                    <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">DefaultRowParser</value>
+                </property>
+                <property key="targetAttValue">
+                    <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">table table-striped</value>
+                </property>
+                <property key="targetTablePos">
+                    <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">-1</value>
+                </property>
+            </loadContext>
         </bank>
         <bank id="UkrEksimBank">
             <name>Укрексімбанк</name>
             <URL>https://www.eximb.com/rus/personal/everyday/currency_exchange/</URL>
-            <storage>UkrEksimBankCurrencyHistory.xml</storage>
+            <storage>data/banksStorage/UkrEksimBankCurrencyHistory.xml</storage>
+            <loadContext>
+                <property key="targetAttName">
+                    <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">class</value>
+                </property>
+                <property key="rowParserID">
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">DefaultRowParser</value>
+                </property>
+                <property key="targetAttValue">
+                    <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">table_1</value>
+                </property>
+                <property key="targetTablePos">
+                    <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">-1</value>
+                </property>
+            </loadContext>
         </bank>
         <bank id="UkrGasBank">
             <name>Укргазбанк</name>
             <URL>http://www.ukrgasbank.com/ukr/currency/</URL>
-            <storage>UkrGasBankCurrencyHistory.xml</storage>
+            <storage>data/banksStorage/UkrGasBankCurrencyHistory.xml</storage>
+            <loadContext>
+                <property key="targetAttName">
+                    <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">id</value>
+                </property>
+                <property key="rowParserID">
+                    <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">DefaultRowParser</value>
+                </property>
+                <property key="targetAttValue">
+                    <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">table_currency</value>
+                </property>
+                <property key="targetTablePos">
+                    <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">1</value>
+                </property>
+            </loadContext>
         </bank>
         <bank id="UkrSibBank">
             <name>Укрсиббанк</name>
             <URL>https://my.ukrsibbank.com/ru/personal/operations/currency_exchange/</URL>
-            <storage>UkrSibBankCurrencyHistory.xml</storage>
+            <storage>data/banksStorage/UkrSibBankCurrencyHistory.xml</storage>
+            <loadContext>
+                <property key="targetAttName">
+                    <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">class</value>
+                </property>
+                <property key="rowParserID">
+                    <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">DefaultRowParser</value>
+                </property>
+                <property key="targetAttValue">
+                    <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">stripeMe content_tbl2</value>
+                </property>
+                <property key="targetTablePos">
+                    <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">1</value>
+                </property>
+                <property key="countPos">
+                    <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">-1</value>
+                </property>
+                <property key="exchangeCodePos">
+                    <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">0</value>
+                </property>
+                <property key="buyPos">
+                    <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">2</value>
+                </property>
+                <property key="salePos">
+                    <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:int">3</value>
+                </property>
+            </loadContext>
         </bank>
     </bankList>
     <currencyList>

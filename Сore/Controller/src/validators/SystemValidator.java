@@ -23,16 +23,18 @@ public class SystemValidator extends AbstractValidator {
             throw new ValidationException("Системна помилка. Для коректної роботи команди класу " + action.getCanonicalName() +
                     " необхідно передати контекст.");
         ContextAnnotation contextAnnotation = action.getAnnotation(ContextAnnotation.class);
-        chechEveryParameter(context, contextAnnotation, action);
+        checkEveryParameter(context, contextAnnotation, action);
     }
 
-    private void chechEveryParameter(Context context, ContextAnnotation contextAnnotation, Class<AbstractAction> action) throws ValidationException {
+    private void checkEveryParameter(Context context, ContextAnnotation contextAnnotation, Class<AbstractAction> action) throws ValidationException {
         for (Parameter param : contextAnnotation.list()) {
             String key = param.key();
             Object value = context.getValue(key);
             if (value == null && !param.optional())
                 throw new ValidationException("В контекст команди класу " + action.getCanonicalName() +
                         " має бути передане значення з ключем " + param.key());
+            if(value == null && param.optional())
+                continue;
             if (!param.type().isAssignableFrom(value.getClass()))
                 throw new ValidationException(String.format("В контексті команди класу %s параметр %s має бути типом %s,а не %s",
                         action.getCanonicalName(), key, param.type(), value.getClass()));

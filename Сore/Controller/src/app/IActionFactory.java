@@ -2,12 +2,14 @@ package app;
 
 import exceptions.RequestException;
 
-/**
- * Created by User on 14.05.2015.
- */
+import java.util.Map;
+
+
 public interface IActionFactory {
 
-    Class getActionClass(String ID) throws RequestException;
+    Class getActionClass(String ID) throws RequestException, ClassNotFoundException;
 
     AbstractAction createAction(String ID, Context c) throws RequestException;
+
+    Map<String,Object> getActionProperties(String ID) throws RequestException;
 }
