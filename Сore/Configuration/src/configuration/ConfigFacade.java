@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executors;
 
 /**
  * Created by User on 13.05.2015.
@@ -48,24 +49,25 @@ public class ConfigFacade {
         }
     }
 
-    public static ConfigFacade getInstance(){
+    public static ConfigFacade getInstance() {
         return facade;
     }
 
     public void loadConfigs(File f) throws ConfigException {
         systemProperties = configStrategy.loadConfigs(f);
         loadBanksConfigs();
+        systemProperties.put("parallels", Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()));
     }
 
     public void storeConfigs(Map<String, Object> props) throws ConfigException {
         configStrategy.storeConfigs(sysConfigsFile, props);
     }
 
-    public Object getSystemProperty(String ID){
-        HashMap<String,Object> result = new HashMap<>();
-        for(String key: systemProperties.keySet()){
-            if(key.contains(ID))
-                result.put(key,systemProperties.get(key));
+    public Object getSystemProperty(String ID) {
+        HashMap<String, Object> result = new HashMap<>();
+        for (String key : systemProperties.keySet()) {
+            if (key.contains(ID))
+                result.put(key, systemProperties.get(key));
         }
         if (result.size() == 1)
             return result.get(ID);
@@ -82,13 +84,13 @@ public class ConfigFacade {
         }
     }
 
-    private void loadBanksConfigs(){
-        HashMap<String,String> bindConfigs = (HashMap<String, String>) getSystemProperty("binding");
+    private void loadBanksConfigs() {
+        HashMap<String, String> bindConfigs = (HashMap<String, String>) getSystemProperty("binding");
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(Class.forName(bindConfigs.get("class")));
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
             BankList bankList = (BankList) unmarshaller.unmarshal(new File(bindConfigs.get("source")));
-            systemProperties.put("bankList",bankList);
+            systemProperties.put("bankList", bankList);
         } catch (JAXBException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -134,6 +136,5 @@ public class ConfigFacade {
         } catch (ConfigException e) {
             e.printStackTrace();
         }
-
     }
 }

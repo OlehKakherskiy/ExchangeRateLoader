@@ -36,15 +36,14 @@ public class UrlRateLoader extends AbstractAction {
             Element targetElement = (targetTablePos == -1) ? l.get(0).child(0) : l.get(0).child(targetTablePos);
             Context c = new Context(b.getLoadContext());
             c.addValue("table", targetElement);
-            c.addValue("exchangeList",context.getValue("exchangeList"));
-            AbstractAction<Map<String, Double>> defaultRowParser = ConfigFacade.getInstance().getActionBuilder().
+            c.addValue("exchangeList", context.getValue("exchangeList"));
+            AbstractAction<Map<String, Double>, Void> defaultRowParser = ConfigFacade.getInstance().getActionBuilder().
                     buildActionObject((String) b.getLoadContext().get("rowParserID"), c);
             ExchangeRate rate = new ExchangeRate(defaultRowParser.call(), LocalDate.now());
             return rate;
 
         } catch (IOException e) {
-            e.printStackTrace();
-            return new ExchangeRate();
+            return new ExchangeRate(); //TODO:
         }
     }
 

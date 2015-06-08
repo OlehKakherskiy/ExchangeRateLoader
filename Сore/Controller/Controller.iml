@@ -10,5 +10,6 @@
     <orderEntry type="module" module-name="Configuration" />
     <orderEntry type="library" name="jsoup-1.8.2-javadoc" level="project" />
     <orderEntry type="module" module-name="Model" />
+    <orderEntry type="module" module-name="View" />
   </component>
 </module>

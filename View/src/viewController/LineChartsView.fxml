@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<fx:root fitToWidth="true" type="javafx.scene.control.ScrollPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <content>
+        <BorderPane fx:id="borderPane">
+            <center>
+                <VBox fx:id="vBox" alignment="CENTER" BorderPane.alignment="CENTER">
+               <children>
+               </children>
+                </VBox>
+            </center>
+            <bottom>
+
+            </bottom>
+        </BorderPane>
+    </content>
+</fx:root>

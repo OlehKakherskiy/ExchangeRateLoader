@@ -13,7 +13,7 @@ import java.util.List;
 @ContextAnnotation(list = {
         @Parameter(key = "exchangeRates", type = List.class)
 })
-public class CalculateDifferenceBetweenRates extends AbstractAction<ExchangeRate> {
+public class CalculateDifferenceBetweenRates extends AbstractAction<ExchangeRate, Void> {
 
 
     @Override
@@ -23,12 +23,16 @@ public class CalculateDifferenceBetweenRates extends AbstractAction<ExchangeRate
         if (list.size() < 2)
             return result;
         ExchangeRate first = list.get(0);
-        ExchangeRate second = list.get(1);
+        ExchangeRate second;
+        if(list.size() == 3 && list.get(0).getUpdateDate().isEqual(list.get(1).getUpdateDate()))
+            second = list.get(2);
+        else second = list.get(1);
         for (String key : first.getRate().keySet()) {
             Double sec = second.getRate().get(key);
             if (sec != null)
                 result.getRate().put(key, first.getRate().get(key) - sec);
         }
+        result.setUpdateDate(second.getUpdateDate());
         return result;
     }
 }

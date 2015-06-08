@@ -21,8 +21,12 @@ public class ActionFactory implements IActionFactory {
     public void configureFactory() {
         HashMap<String, Object> result = (HashMap<String, Object>) ConfigFacade.getInstance().getSystemProperty("actionList");
         for (String key : result.keySet()) {
-            result.put("needResponseView", key.contains("true") ? true : false);
-            readyToInstanceActions.put(key.substring(key.indexOf('?') + 1), result.get(key));
+            ((Map<String, Object>) result.get(key)).put("needResponseView", key.contains("true") ? true : false);
+            int indexFrom = key.indexOf("#id?") + 4;
+            int indexTo = key.indexOf('#', indexFrom);
+            if (indexTo == -1)
+                readyToInstanceActions.put(key.substring(indexFrom), result.get(key));
+            else readyToInstanceActions.put(key.substring(indexFrom, indexTo), result.get(key));
         }
     }
 
@@ -41,11 +45,11 @@ public class ActionFactory implements IActionFactory {
             Class actionClass = Class.forName((String) props.get("class"));
             AbstractAction result = (AbstractAction) actionClass.newInstance();
             if ((Boolean) props.get("needResponseView") == true) {
-                if(props.get("responseView") == null)
+                if (props.get("viewID") == null)
                     throw new RequestException(); //TODO:
                 result.setResponseView(ConfigFacade.getInstance().getViewFactory().createView((String) props.get("viewID")));
-            }
-            result.setContext(c);
+                result.setContext(c);
+            }//TODO: responseView не передал в ShowHistory. А должен!! Не работает команда подсчета разницы
             return result;
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             e.printStackTrace();

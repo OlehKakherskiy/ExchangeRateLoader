@@ -16,7 +16,7 @@ public class Context {
         context = new HashMap<>();
     }
 
-    public Context(@NotNull HashMap<String,Object> context){
+    public Context(@NotNull Map<String, Object> context){
         this.context = context;
     }
 
@@ -31,7 +31,12 @@ public class Context {
     public void clear(){
         context.clear();
     }
+
     public Object getValue(String key){
         return context.get(key);
+    }
+
+    public Map<String,Object> getContext(){
+        return context;
     }
 }

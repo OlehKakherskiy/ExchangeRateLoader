@@ -4,7 +4,6 @@ import annotation.Action;
 import annotation.ContextAnnotation;
 import annotation.Parameter;
 import app.AbstractAction;
-import app.Context;
 import entity.DateCount;
 import entity.ExchangeRate;
 
@@ -27,12 +26,19 @@ import java.util.List;
 @ContextAnnotation(list = {
         @Parameter(key = "dateCount", type = DateCount.class),
         @Parameter(key = "targetFile"),
-        @Parameter(key = "startDate", type = LocalDate.class, optional = true)
+        @Parameter(key = "startDate", type = LocalDate.class, optional = true),
+        @Parameter(key = "exchangeNames", type = List.class),
+        @Parameter(key = "readBuyValue", type = Boolean.class),
+        @Parameter(key = "readSaleValue", type = Boolean.class)
 })
-public class ReadExchangeRateCommand extends AbstractAction {
+public class ReadExchangeRateCommand extends AbstractAction<List<ExchangeRate>, Void> {
 
-    private boolean lastUpdate = false;
 
+    private boolean readBuyValue;
+
+    private boolean readSaleValue;
+
+    private List<String> exchangeCodes;
 
     private ExchangeRate createAndFillExchangeRateObject(XMLStreamReader reader, LocalDate date) throws XMLStreamException {
         ExchangeRate result = new ExchangeRate();
@@ -45,12 +51,15 @@ public class ReadExchangeRateCommand extends AbstractAction {
                     continue;
                 }
                 String currencyName = reader.getLocalName();
-                ExchangeRate.put(currencyName.concat("#").concat(reader.getAttributeLocalName(0)),
-                        Double.valueOf(reader.getAttributeValue(0)));
-                ExchangeRate.put(currencyName.concat("#").concat(reader.getAttributeLocalName(1)),
-                        Double.valueOf(reader.getAttributeValue(1)));
-            } else if (code == XMLStreamConstants.END_ELEMENT && reader.getLocalName().compareTo("ExchangeRate") == 0)
+                if(!exchangeCodes.contains(currencyName))
+                    continue;
+                if (readBuyValue)
+                    ExchangeRate.put(currencyName.concat("#buy"), Double.valueOf(reader.getAttributeValue(null, "buy")));
+                if(readSaleValue)
+                    ExchangeRate.put(currencyName.concat("#sale"), Double.valueOf(reader.getAttributeValue(null, "sale")));
+            } else if (code == XMLStreamConstants.END_ELEMENT && reader.getLocalName().compareTo("exchangeRate") == 0) {
                 break;
+            }
         }
         result.setRate(ExchangeRate);
         if (date != null)
@@ -61,13 +70,10 @@ public class ReadExchangeRateCommand extends AbstractAction {
     private LocalDate calculateEndDate(LocalDate startDate) {
         DateCount dateCount = (DateCount) context.getValue("dateCount");
         switch (dateCount) {
-            case LastUpdate: {
-                lastUpdate = true;
-                return null;
-            }
-            case Week: {
+            case PrevTwoDates:
+                return startDate.minusDays(2);
+            case Week:
                 return startDate.minusDays(6);
-            }
             case Month:
                 return startDate.minusMonths(1);
             case ThreeMonth:
@@ -90,28 +96,25 @@ public class ReadExchangeRateCommand extends AbstractAction {
         return 0;
     }
 
+
     @Override
     public List<ExchangeRate> call() throws Exception {
-        List result = (List) new ArrayList<>();
+        readBuyValue = (boolean) context.getValue("readBuyValue");
+        readSaleValue = (boolean) context.getValue("readSaleValue");
+        exchangeCodes = (List<String>) context.getValue("exchangeNames");
+        List<ExchangeRate> result = new ArrayList<>();
         LocalDate startDate = (LocalDate) context.getValue("startDate");
         LocalDate endDate = calculateEndDate(startDate);
         XMLInputFactory factory = XMLInputFactory.newInstance();
         File f = new File((String) context.getValue("targetFile"));
-        if (!f.exists())
+        if (!f.exists()) {
             return result;
+        }
 
         try {
             XMLStreamReader reader = factory.createXMLStreamReader(new FileInputStream(f));
-            if (lastUpdate) {
-                reader.next();
-                reader.next();
-                reader.next();
-                result.add(createAndFillExchangeRateObject(reader, null));
-                reader.close();
-                return result;
-            }
             while (reader.hasNext())
-                if (reader.next() == XMLStreamConstants.START_ELEMENT && reader.getLocalName().compareTo("ExchangeRate") == 0) {
+                if (reader.next() == XMLStreamConstants.START_ELEMENT && reader.getLocalName().compareTo("exchangeRate") == 0) {
                     LocalDate date = LocalDate.parse(reader.getAttributeValue(null, "date"));
                     int code = compareDates(startDate, date, endDate);
                     if (code == -1)
@@ -128,18 +131,4 @@ public class ReadExchangeRateCommand extends AbstractAction {
         }
         return result;
     }
-
-
-    public static void main(String[] args) throws Exception {
-        Context c = new Context();
-        c.addValue("dateCount", DateCount.LastUpdate);
-        c.addValue("targetFile", "data/banksStorage/PrivatBankCurrencyHistory.xml");
-        c.addValue("startDate", LocalDate.now());
-        ReadExchangeRateCommand r = new ReadExchangeRateCommand();
-        r.context = c;
-        List<ExchangeRate> rates = r.call();
-        for (ExchangeRate rate : rates)
-            System.out.println(rate.getUpdateDate() + " " + rate.getRate());
-    }
-
 }

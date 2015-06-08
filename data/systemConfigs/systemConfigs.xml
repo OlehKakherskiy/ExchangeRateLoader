@@ -33,19 +33,19 @@
         </action>
     </actionList>
     <viewList>
-        <view id="MainView">
+        <view id="MainView" getFromSource="false">
             <source>MainView.fxml</source>
             <class>viewController.MainViewController</class>
         </view>
-        <view id="TableView">
+        <view id="TableView" getFromSource="false">
             <source>exchangeRateTableView.fxml</source>
             <class>viewController.TableViewController</class>
         </view>
-        <view id="HistoryChartsView">
+        <view id="HistoryChartsView" getFromSource="false">
             <source>LineChartsView.fxml</source>
             <class>viewController.LineChartsPanel</class>
         </view>
-        <view id="HistoryParamsPanel">
+        <view id="HistoryParamsView">
             <source>ShowHistoryParamsView.fxml</source>
             <class>viewController.ChooseHistoryParamsController</class>
         </view>
@@ -60,7 +60,7 @@
     </exchangesToShow>
     <actionBuilder>app.ActionBuilder</actionBuilder>
     <actionFactory>app.ActionFactory</actionFactory>
-    <viewFactory>app.ViewFactory</viewFactory>
+    <viewFactory>app.FxViewFactory</viewFactory>
     <validatorFactory>app.ValidatorFactory</validatorFactory>
     <binding>
         <source>data/banksConfigs.xml</source>

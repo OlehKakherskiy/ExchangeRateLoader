@@ -1,7 +1,8 @@
 package entity;
 
+import javafx.collections.FXCollections;
+
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -14,12 +15,12 @@ public class ExchangeRate {
     private LocalDate updateDate;
 
     public ExchangeRate() {
-        rate = new HashMap<>();
+        rate = FXCollections.observableHashMap();
         updateDate = LocalDate.now();
     }
 
     public ExchangeRate(Map<String, Double> rate, LocalDate updateDate) {
-        this.rate = rate;
+        this.rate = FXCollections.observableMap(rate);
         this.updateDate = updateDate;
     }
 
@@ -28,7 +29,7 @@ public class ExchangeRate {
     }
 
     public void setRate(Map<String, Double> rate) {
-        this.rate = rate;
+        this.rate.putAll(rate);
     }
 
     public LocalDate getUpdateDate() {

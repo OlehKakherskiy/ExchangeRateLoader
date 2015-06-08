@@ -19,9 +19,6 @@ public class Bank {
     @XmlElement
     private String name;
 
-    @XmlElement
-    private Integer wqe;
-
     @XmlAttribute(name = "id")
     private String ID;
 
@@ -103,6 +100,11 @@ public class Bank {
 
     public void setStorage(String storage) {
         this.storage = storage;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 
     @XmlRootElement(name = "loadProperties")

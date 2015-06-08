@@ -21,19 +21,19 @@ import java.util.List;
         @Parameter(key = "reUpdate", type = Boolean.class),
         @Parameter(key = "currencyList", type = List.class)
 })
-public class SaveExchangeRateCommand extends AbstractAction {
+public class SaveExchangeRateCommand extends AbstractAction<Void, Void> {
 
     private ExchangeRate rate;
 
     @Override
-    public void run() {
+    public Void call() throws Exception {
         File targetFile = new File((String) context.getValue("storageFilePath"));
         StringBuilder result = new StringBuilder();
         rate = (ExchangeRate) context.getValue("exchangeRate");
         if (!targetFile.exists()) {
             createTargetFile(targetFile);
             firstDataUpdate(targetFile);
-            return;
+            return null;
         }
 
         try (BufferedReader reader = new BufferedReader(new FileReader(targetFile))) {
@@ -54,6 +54,7 @@ public class SaveExchangeRateCommand extends AbstractAction {
             e.printStackTrace();
         }
         writeAllDataToFile(targetFile, result.toString());
+        return null;
     }
 
     private int getLastUpdateCount(String row) {
@@ -122,6 +123,10 @@ public class SaveExchangeRateCommand extends AbstractAction {
         c.addValue("currencyList", ((BankList) ConfigFacade.getInstance().getSystemProperty("bankList")).getExchangeList());
         c.addValue("storageFilePath", "data/banksStorage/1.xml");
         AbstractAction s = ConfigFacade.getInstance().getActionBuilder().buildActionObject("SaveExchangeRate", c);
-        s.run();
+        try {
+            s.call();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

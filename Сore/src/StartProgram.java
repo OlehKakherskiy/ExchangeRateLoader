@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 /**
  * Created by User on 15.05.2015.
  */
-public class StartProgram extends Application{
+public class StartProgram extends Application {
 
     public static void main(String[] args) {
         launch(args);
@@ -17,6 +17,7 @@ public class StartProgram extends Application{
     @Override
     public void start(Stage primaryStage) throws Exception {
         ConfigFacade f = ConfigFacade.getInstance();
+        primaryStage.setOnCloseRequest(event -> System.exit(0));
         try {
             f.setActionBuilder((IActionBuilder) Class.forName((String) f.getSystemProperty("actionBuilder")).newInstance());
             f.setViewFactory((IViewFactory) Class.forName((String) f.getSystemProperty("viewFactory")).newInstance());
@@ -25,9 +26,14 @@ public class StartProgram extends Application{
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+
+//        ShowExchangeHistoryAction.main(null);
         AbstractView mainPane = ConfigFacade.getInstance().getViewFactory().createView("MainView");
+
         primaryStage.setScene(new Scene((Parent) mainPane));
-        mainPane.setNextView(ConfigFacade.getInstance().getViewFactory().createView("TableView"));
-        Controller.getController().addRequest("StartAction", null);
+        primaryStage.show();
+        Context c = new Context();
+        c.addValue("requestView", mainPane);
+        Controller.getController().addRequest("StartAction", c);
     }
 }
