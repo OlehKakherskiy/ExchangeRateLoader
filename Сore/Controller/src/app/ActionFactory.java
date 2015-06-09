@@ -48,8 +48,9 @@ public class ActionFactory implements IActionFactory {
                 if (props.get("viewID") == null)
                     throw new RequestException(); //TODO:
                 result.setResponseView(ConfigFacade.getInstance().getViewFactory().createView((String) props.get("viewID")));
-                result.setContext(c);
-            }//TODO: responseView не передал в ShowHistory. А должен!! Не работает команда подсчета разницы
+            }
+            result.setContext(c);
+            //TODO: responseView не передал в ShowHistory. А должен!! Не работает команда подсчета разницы
             return result;
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             e.printStackTrace();

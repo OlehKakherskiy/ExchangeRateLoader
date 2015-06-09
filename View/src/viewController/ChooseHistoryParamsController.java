@@ -39,6 +39,9 @@ public class ChooseHistoryParamsController extends Pane implements AbstractView<
     @FXML
     private HBox exchangeNameBox;
 
+    @FXML
+    private CheckBox interBankRate;
+
     private AbstractView requestSourceView;
 
     private List<Bank> banks;
@@ -48,30 +51,49 @@ public class ChooseHistoryParamsController extends Pane implements AbstractView<
         Context c = new Context();
         c.addValue("readBuyValue", buy.isSelected());
         c.addValue("readSaleValue", sale.isSelected());
-        c.addValue("dateCount", historyGroup.getSelectedToggle().getUserData());
+        if (historyGroup.getSelectedToggle() != null)
+            c.addValue("dateCount", historyGroup.getSelectedToggle().getUserData());
         c.addValue("requestView", requestSourceView);
 
-        if (banks != null)
-            c.addValue("banks", banks);
-        else {
-            if (requestSourceView instanceof TableViewController) {
-                banks = new ArrayList<>();
-                List<TableRowData> list = ((TableViewController) requestSourceView).tableView.getSelectionModel().getSelectedItems();
-                System.out.println(list);
-                for (TableRowData data : list)
-                    banks.add(data.getBank());
-            }
+        if (requestSourceView instanceof TableViewController) {
+            banks = new ArrayList<>();
+            List<TableRowData> list = ((TableViewController) requestSourceView).tableView.getSelectionModel().getSelectedItems();
+            for (TableRowData data : list)
+                banks.add(data.getBank());
+        }
+
+        int interBankPos = hasInterBank();
+        if (interBankRate.isSelected() && interBankPos == -1) {
+            Map<String, Object> map = (Map<String, Object>) ConfigFacade.getInstance().getSystemProperty("interBank");
+            banks.add((Bank) map.get("interBank"));
+        } else if (!interBankRate.isSelected() && interBankPos != -1) {
+            banks.remove(interBankPos);
         }
         c.addValue("banks", banks);
         List<String> exchangeNames = new ArrayList<>();
         for (Node node : exchangeNameBox.getChildren()) {
             CheckBox checkBox = (CheckBox) node;
             if (checkBox.isSelected())
-                exchangeNames.add(checkBox.getText()); //TODO: тут может не передаться название валюты
+                exchangeNames.add(checkBox.getText());
         }
         c.addValue("exchangeNames", exchangeNames);
         c.addValue("startDate", LocalDate.now());
         Controller.getController().addRequest("ShowExchangeHistory", c);
+        banks = null;
+    }
+
+    private int hasInterBank() {
+        if (banks == null || banks.size() == 0)
+            return -1;
+        else {
+            int iterator = 0;
+            for (Bank b : banks) {
+                if (b.getStorage().compareTo((String) ConfigFacade.getInstance().getSystemProperty("interBankDataStorage")) == 0)
+                    return iterator;
+                iterator++;
+            }
+            return -1;
+        }
     }
 
     public AbstractView getRequestSourceView() {
@@ -110,7 +132,9 @@ public class ChooseHistoryParamsController extends Pane implements AbstractView<
         historyGroup.getToggles().get(4).setUserData(DateCount.Year);
         historyGroup.getToggles().get(5).setUserData(DateCount.AllTime);
 
-        Map<String,Object> exchangesToShow = (Map<String, Object>) ConfigFacade.getInstance().getSystemProperty("exchangesToShow");
+        Map<String, Object> exchangesToShow = (Map<String, Object>) ConfigFacade.getInstance().getSystemProperty("exchangesToShow");
+        if (exchangeNameBox.getChildren().size() != 0)
+            return;
         for (String exchangeKey : exchangesToShow.keySet()) {
             CheckBox checkBox = new CheckBox((String) exchangesToShow.get(exchangeKey));
             exchangeNameBox.setMargin(checkBox, new Insets(0, 10, 0, 0));

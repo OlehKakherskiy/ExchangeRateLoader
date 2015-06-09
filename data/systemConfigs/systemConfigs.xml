@@ -26,10 +26,14 @@
             <class>actions.CalculateDifferenceBetweenRates</class>
             <validatorID>SystemValidator</validatorID>
         </action>
-        <action id="ShowExchangeHistory">
+        <action id="ShowExchangeHistory" needResponseView="true">
             <class>actions.ShowExchangeHistoryAction</class>
             <validatorID>SystemValidator</validatorID>
             <viewID>HistoryChartsView</viewID>
+        </action>
+        <action id="getInterBankData" needResponseView="false">
+            <class>actions.CalculateAndSaveInterBankRate</class>
+            <validatorID>SystemValidator</validatorID>
         </action>
     </actionList>
     <viewList>
@@ -58,6 +62,7 @@
         <exchange id="2">EUR</exchange>
         <exchange id="3">RUB</exchange>
     </exchangesToShow>
+    <interBankDataStorage>data/banksStorage/InterBankCurrencyHistory.xml</interBankDataStorage>
     <actionBuilder>app.ActionBuilder</actionBuilder>
     <actionFactory>app.ActionFactory</actionFactory>
     <viewFactory>app.FxViewFactory</viewFactory>

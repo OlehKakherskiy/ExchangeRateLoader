@@ -10,5 +10,6 @@
     <orderEntry type="module" module-name="Configuration" />
     <orderEntry type="module" module-name="Controller" />
     <orderEntry type="module" module-name="View" />
+    <orderEntry type="module" module-name="Model" />
   </component>
 </module>

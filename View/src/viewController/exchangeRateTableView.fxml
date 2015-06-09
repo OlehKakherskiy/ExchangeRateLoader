@@ -7,6 +7,9 @@
          xmlns:fx="http://javafx.com/fxml/1">
     <content>
         <BorderPane fx:id="borderPane">
+            <top>
+                <fx:include source="InterBankExchangeRate.fxml" fx:id="interBankRate" BorderPane.alignment="CENTER"/>
+            </top>
             <center>
                 <GridPane alignment="CENTER" BorderPane.alignment="CENTER">
                     <columnConstraints>

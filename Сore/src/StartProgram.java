@@ -1,9 +1,13 @@
 import app.*;
 import configuration.ConfigFacade;
+import entity.Bank;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by User on 15.05.2015.
@@ -27,13 +31,20 @@ public class StartProgram extends Application {
             e.printStackTrace();
         }
 
-//        ShowExchangeHistoryAction.main(null);
         AbstractView mainPane = ConfigFacade.getInstance().getViewFactory().createView("MainView");
-
+        f.setSystemProperty("MainView", mainPane);
+        Bank interBank = new Bank();
+        interBank.setStorage((String) f.getSystemProperty("interBankDataStorage"));
+        interBank.setName("средний курс по Украине");
+        f.setSystemProperty("interBank", interBank);
         primaryStage.setScene(new Scene((Parent) mainPane));
         primaryStage.show();
         Context c = new Context();
         c.addValue("requestView", mainPane);
         Controller.getController().addRequest("StartAction", c);
+        Map<String, Object> map = new HashMap<>();
+        map.put("nextTabClosingPolicy", false);
+        map.put("nextViewTitle", "Курс валют");
+        mainPane.updateView(map);
     }
 }

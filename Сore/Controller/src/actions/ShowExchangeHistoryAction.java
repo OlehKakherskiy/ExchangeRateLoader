@@ -13,6 +13,7 @@ import entity.DateCount;
 import entity.ExchangeRate;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,32 +31,37 @@ import java.util.concurrent.ExecutorService;
 })
 public class ShowExchangeHistoryAction extends AbstractAction<Void, Map<String, Map<String, Map<LocalDate, Double>>>> {
 
+    private volatile Map<String, List<ExchangeRate>> resultMap;
+
     @Override
     public Void call() throws Exception {
-        Map<String, List<ExchangeRate>> resultMap = new HashMap<>();
+        resultMap = Collections.synchronizedMap(new HashMap<>());
         List<Bank> banksData = (List<Bank>) context.getValue("banks");
         ExecutorService parallels = (ExecutorService) ConfigFacade.getInstance().getSystemProperty("parallels");
-        for (Bank bank : banksData)
-            parallels.submit(() -> {
-                try {
-                    resultMap.put(bank.getName(), getBanksExchangeRate(bank.getStorage()));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            });
-
+        for (Bank bank : banksData) {
+            if (bank != null)
+                parallels.execute(() -> {
+                    try {
+                        resultMap.put(bank.getName(), getBanksExchangeRate(bank.getStorage()));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+        }
+        while (resultMap.size() < banksData.size())
+            Thread.currentThread().sleep(3000);
         responseView.updateView(reformatData(resultMap));
         ((AbstractView) context.getValue("requestView")).setNextView(responseView);
         return null;
     }
 
     private Map<String, Map<String, Map<LocalDate, Double>>> reformatData(Map<String, List<ExchangeRate>> input) {
-        Map<String, Map<String, Map<LocalDate, Double>>> resultMap = new HashMap<>();
-        for (String key : input.keySet()) {
-            Map<String, Map<LocalDate, Double>> exchangeRateGroupedByExchangeName = new HashMap<>();
+        Map<String, Map<String, Map<LocalDate, Double>>> resultMap = new HashMap<>(); //имя банка: карта[имя валюты: карта[дата-значение]]
+        for (String key : input.keySet()) { //для каждого банка
+            Map<String, Map<LocalDate, Double>> exchangeRateGroupedByExchangeName = new HashMap<>(); //карта группировки по валюте
             resultMap.put(key, exchangeRateGroupedByExchangeName);
-            for (ExchangeRate rate : input.get(key)) {
-                for (String exchangeNameAndOperation : rate.getRate().keySet()) {
+            for (ExchangeRate rate : input.get(key)) { //список стоимостей валюты
+                for (String exchangeNameAndOperation : rate.getRate().keySet()) { // для каждой валюты
                     if (exchangeRateGroupedByExchangeName.get(exchangeNameAndOperation) == null)
                         exchangeRateGroupedByExchangeName.put(exchangeNameAndOperation, new HashMap<>());
                     exchangeRateGroupedByExchangeName.get(exchangeNameAndOperation).put(rate.getUpdateDate(),
@@ -67,11 +73,12 @@ public class ShowExchangeHistoryAction extends AbstractAction<Void, Map<String, 
     }
 
 
-    private List<ExchangeRate> getBanksExchangeRate(String storage) throws Exception {
+    private synchronized List<ExchangeRate> getBanksExchangeRate(String storage) throws Exception {
         Context c = new Context(context.getContext());
         c.addValue("targetFile", storage);
         AbstractAction<List<ExchangeRate>, Void> readAction = ConfigFacade.getInstance().getActionBuilder().buildActionObject("ReadExchangeRate", c);
-        return readAction.call();
+        List<ExchangeRate> rate = readAction.call();
+        return rate;
     }
 
 
@@ -81,10 +88,7 @@ public class ShowExchangeHistoryAction extends AbstractAction<Void, Map<String, 
         c.addValue("readBuyValue", true);
         c.addValue("readSaleValue", true);
         BankList l = (BankList) ConfigFacade.getInstance().getSystemProperty("bankList");
-        Map<String, String> banksMap = new HashMap<>();
-        for (Bank b : l.getBankList())
-            banksMap.put(b.getName(), b.getStorage());
-        c.addValue("banksNamesAndStorages", banksMap);
+        c.addValue("banks", l.getBankList());
         c.addValue("exchangeNames", l.getExchangeList());
         c.addValue("startDate", LocalDate.now());
         ShowExchangeHistoryAction l1 = new ShowExchangeHistoryAction();

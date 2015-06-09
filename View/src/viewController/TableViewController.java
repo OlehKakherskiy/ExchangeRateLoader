@@ -3,11 +3,12 @@ package viewController;
 import app.AbstractView;
 import configuration.ConfigFacade;
 import entity.Bank;
+import entity.ExchangeRate;
 import entity.TableRowData;
 import exceptions.RequestException;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.collections.ObservableList;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.ScrollPane;
@@ -19,9 +20,10 @@ import javafx.scene.layout.Pane;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class TableViewController extends ScrollPane implements AbstractView<ObservableList<TableRowData>> {
+public class TableViewController extends ScrollPane implements AbstractView<Map<String, Object>> {
 
     static {
         ConfigFacade facade = ConfigFacade.getInstance();
@@ -38,13 +40,28 @@ public class TableViewController extends ScrollPane implements AbstractView<Obse
     @FXML
     BorderPane borderPane;
 
+    @FXML
+    private Pane interBankRate;
+
+    @FXML
+    private InterBankViewController interBankRateController;
+
     @Override
-    public void updateView(ObservableList<TableRowData> data) {
-        tableView.setItems(data);
+    public void updateView(Map<String, Object> data) {
+        if (data.get("tableRowData") != null)
+            tableView.setItems(FXCollections.observableList((List<TableRowData>) data.get("tableRowData")));
+        if (data.get("currentRate") != null)
+            interBankRateController.setCurrentRate((ExchangeRate) data.get("currentRate"));
+        if (data.get("diffRate") != null)
+            interBankRateController.setDiffRate((ExchangeRate) data.get("diffRate"));
     }
 
     @Override
     public void setNextView(AbstractView nextView) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("nextTabClosingPolicy", true);
+        map.put("nextViewTitle", "История");
+        ((AbstractView) ConfigFacade.getInstance().getSystemProperty("MainView")).updateView(map);
         ((AbstractView) ConfigFacade.getInstance().getSystemProperty("MainView")).setNextView(nextView);
     }
 
@@ -70,8 +87,8 @@ public class TableViewController extends ScrollPane implements AbstractView<Obse
             TableColumn<TableRowData, String> diffColumn = new TableColumn<>("изменение\nпокупка/продажа");
 
             diffColumn.setCellValueFactory(param1 -> new ReadOnlyObjectWrapper<>(getDifferenceRate(param1.getValue(), exchangeName)));
-            buyColumn.setCellValueFactory(param1 -> new SimpleDoubleProperty(getExchangeRate(param1.getValue(), exchangeName, true)));
-            saleColumn.setCellValueFactory(param1 -> new SimpleDoubleProperty(getExchangeRate(param1.getValue(), exchangeName, false)));
+            buyColumn.setCellValueFactory(param1 -> new SimpleDoubleProperty(getExchangeRate(param1.getValue(), exchangeName, true, false)));
+            saleColumn.setCellValueFactory(param1 -> new SimpleDoubleProperty(getExchangeRate(param1.getValue(), exchangeName, false, false)));
             column.getColumns().addAll(buyColumn, saleColumn, diffColumn);
             tableView.getColumns().addAll(column);
         }
@@ -80,14 +97,17 @@ public class TableViewController extends ScrollPane implements AbstractView<Obse
 
     private String getDifferenceRate(TableRowData value, String exchangeRateName) {
         StringBuilder builder = new StringBuilder();
-        builder.append(getExchangeRate(value, exchangeRateName, true));
-        builder.append("/").append(getExchangeRate(value, exchangeRateName, false));
+        builder.append(getExchangeRate(value, exchangeRateName, true, true));
+        builder.append("/").append(getExchangeRate(value, exchangeRateName, false, true));
         builder.append(" ").append(value.getRateDifference().getUpdateDate());
         return builder.toString();
     }
 
-    private Double getExchangeRate(TableRowData value, String exchangeRateName, boolean buy) {
+    private Double getExchangeRate(TableRowData value, String exchangeRateName, boolean buy, boolean differenceRate) {
         String buyOrSale = buy == true ? "#buy" : "#sale";
+        if (differenceRate)
+            return Double.valueOf(String.format("%.3f", value.getRateDifference().getRate().
+                    get(exchangeRateName.concat(buyOrSale)).doubleValue()).replace(',', '.'));
         return Double.valueOf(String.format("%.3f",
                 value.getCurrentRate().getRate().get(exchangeRateName.concat(buyOrSale)).doubleValue()).replace(',', '.'));
     }

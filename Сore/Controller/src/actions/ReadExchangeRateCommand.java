@@ -54,9 +54,9 @@ public class ReadExchangeRateCommand extends AbstractAction<List<ExchangeRate>, 
                 if(!exchangeCodes.contains(currencyName))
                     continue;
                 if (readBuyValue)
-                    ExchangeRate.put(currencyName.concat("#buy"), Double.valueOf(reader.getAttributeValue(null, "buy")));
+                    ExchangeRate.put(currencyName.concat("#buy"), Double.valueOf(reader.getAttributeValue(null, "buy").replace(',','.')));
                 if(readSaleValue)
-                    ExchangeRate.put(currencyName.concat("#sale"), Double.valueOf(reader.getAttributeValue(null, "sale")));
+                    ExchangeRate.put(currencyName.concat("#sale"), Double.valueOf(reader.getAttributeValue(null, "sale").replace(',','.')));
             } else if (code == XMLStreamConstants.END_ELEMENT && reader.getLocalName().compareTo("exchangeRate") == 0) {
                 break;
             }

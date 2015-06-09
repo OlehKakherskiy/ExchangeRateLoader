@@ -14,7 +14,7 @@ import java.util.Map;
 
 @XmlRootElement(name = "bank")
 @XmlAccessorType(XmlAccessType.NONE)
-public class Bank {
+public class Bank implements Cloneable {
 
     @XmlElement
     private String name;
@@ -52,16 +52,21 @@ public class Bank {
         }
     }
 
-    public Bank(String name, String ID, String URL, HashMap<String, Object> loadContext) {
+    public Bank(String name, String ID, String URL, HashMap<String, Object> loadContext, String storage) {
         this.name = name;
         this.ID = ID;
         this.URL = URL;
         this.loadContext = loadContext;
+        this.storage = storage;
     }
 
     public Bank() {
     }
 
+    @Override
+    public Bank clone(){
+        return new Bank(this.name,this.ID,this.URL,this.loadContext,this.storage);
+    }
     public String getName() {
         return name;
     }

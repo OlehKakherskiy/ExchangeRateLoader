@@ -7,7 +7,6 @@ import app.AbstractAction;
 import app.Context;
 import configuration.ConfigFacade;
 import entity.Bank;
-import entity.BankList;
 import entity.ExchangeRate;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -44,20 +43,6 @@ public class UrlRateLoader extends AbstractAction {
 
         } catch (IOException e) {
             return new ExchangeRate(); //TODO:
-        }
-    }
-
-    public static void main(String[] args) {
-        UrlRateLoader loader = new UrlRateLoader();
-        BankList bList = ((BankList) ConfigFacade.getInstance().getSystemProperty("bankList"));
-        for (Bank bank : bList.getBankList()) {
-            System.out.println(bank.getName());
-            Context c = new Context(bank.getLoadContext());
-            c.addValue("URL", bank.getURL());
-            c.addValue("bank", bank);
-            c.addValue("exchangeList", bList.getExchangeList());
-            loader.setContext(c);
-//            System.out.println(loader.call());
         }
     }
 }

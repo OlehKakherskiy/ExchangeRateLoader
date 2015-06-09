@@ -96,6 +96,10 @@ public class ConfigFacade {
         }
     }
 
+    public void setSystemProperty(String key, Object value) {
+        systemProperties.put(key, value);
+    }
+
     public IActionBuilder getActionBuilder() {
         return actionBuilder;
     }
@@ -128,13 +132,4 @@ public class ConfigFacade {
         this.actionFactory = actionFactory;
     }
 
-    public static void main(String[] args) {
-        ConfigFacade f = ConfigFacade.getInstance();
-        try {
-            f.loadConfigs(f.sysConfigsFile);
-            System.out.println(f.systemProperties);
-        } catch (ConfigException e) {
-            e.printStackTrace();
-        }
-    }
 }

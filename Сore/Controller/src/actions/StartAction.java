@@ -6,38 +6,39 @@ import annotation.Parameter;
 import app.AbstractAction;
 import app.AbstractView;
 import app.Context;
-import app.IActionBuilder;
 import configuration.ConfigFacade;
 import entity.*;
 import javafx.collections.FXCollections;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
+import java.util.stream.Collectors;
+
+import static actions.ActionTemplates.*;
 
 @Action(updatesView = true)
 @ContextAnnotation(list = {
         @Parameter(key = "requestView", type = AbstractView.class)
 })
-public class StartAction extends AbstractAction<Void, List<TableRowData>> {
-
-    private IActionBuilder actionBuilder = ConfigFacade.getInstance().getActionBuilder();
+public class StartAction extends AbstractAction<Void, Map<String, Object>> {
 
     private static ExecutorService parallels = (ExecutorService) ConfigFacade.getInstance().getSystemProperty("parallels");
+
+    private volatile List<TableRowData> tableData;
 
     @Override
     public Void call() throws Exception {
         BankList list = (BankList) ConfigFacade.getInstance().getSystemProperty("bankList");
-
         //TODO: оставить укрэксимбанк и сделать так, чтобы он возвращал историю
-        List<TableRowData> tableData = FXCollections.observableArrayList();
+        tableData = Collections.synchronizedList(FXCollections.observableArrayList());
         for (Bank b : list.getBankList()) {
             parallels.submit(() -> {
                 try {
-                    List<ExchangeRate> lastRate = readExchangeRates(b, LocalDate.now(), list);
-
-                    System.out.println(lastRate.size());
+                    List<ExchangeRate> lastRate = readExchangeRates(b.getStorage(), LocalDate.now(), list.getExchangeList(), DateCount.PrevTwoDates);
                     ExchangeRate currentRate = null;
                     try {
                         currentRate = loadExchangeRate(b, list.getExchangeList());
@@ -47,7 +48,7 @@ public class StartAction extends AbstractAction<Void, List<TableRowData>> {
                     TableRowData tableRowData = new TableRowData();
                     if (currentRate != null && currentRate.getRate().size() != 0) {
                         boolean reUpdate = (lastRate.get(0).getUpdateDate().isEqual(LocalDate.now())) ? true : false;
-                        saveExchangeRate(b, list.getExchangeList(), currentRate, reUpdate);
+                        saveExchangeRate(b.getStorage(), list.getExchangeList(), currentRate, reUpdate);
                         if (reUpdate)
                             lastRate.set(0, currentRate);
                         else
@@ -55,7 +56,6 @@ public class StartAction extends AbstractAction<Void, List<TableRowData>> {
                     } else currentRate = lastRate.get(0);
                     ExchangeRate differenceRate = calculateDifference(lastRate);
                     tableRowData.setRateDifference(differenceRate);
-
                     tableRowData.setBank(b);
                     tableRowData.setCurrentRate(currentRate);
                     tableData.add(tableRowData);
@@ -64,56 +64,14 @@ public class StartAction extends AbstractAction<Void, List<TableRowData>> {
                 }
             });
         }
-        responseView.updateView(tableData);
+        while (tableData.size() < list.getBankList().size())
+            Thread.currentThread().sleep(2000);
+        Map<String, Object> result = new HashMap<>();
+        result.put("tableRowData", tableData);
+        result.putAll(getInterBankData());
+        responseView.updateView(result);
         ((AbstractView) context.getValue("requestView")).setNextView(responseView);
         return null;
-    }
-
-    private List<ExchangeRate> readExchangeRates(Bank b, LocalDate date, BankList list) throws Exception {
-        Context c = new Context();
-        c.addValue("targetFile", b.getStorage());
-        c.addValue("readBuyValue", true);
-        c.addValue("readSaleValue", true);
-        c.addValue("exchangeNames", list.getExchangeList());
-        c.addValue("dateCount", DateCount.PrevTwoDates);
-        c.addValue("startDate", date);
-        AbstractAction<List<ExchangeRate>, Void> readAction = actionBuilder.buildActionObject("ReadExchangeRate", c);
-        return readAction.call();
-    }
-
-    private ExchangeRate loadExchangeRate(Bank b, List<String> exchangeList) throws Exception {
-
-        Context context = new Context((HashMap<String, Object>) b.getLoadContext().clone());
-        context.addValue("exchangeList", exchangeList);
-        context.addValue("bank", b);
-
-        AbstractAction<ExchangeRate, Void> loader = actionBuilder.buildActionObject("URLLoader", context);
-        return loader.call();
-    }
-
-    private void saveExchangeRate(Bank b, List<String> exchangeList, ExchangeRate rate, boolean reUpdate) {
-
-        Context context = new Context();
-        context.addValue("exchangeRate", rate);
-        context.addValue("currencyList", exchangeList);
-        context.addValue("storageFilePath", b.getStorage());
-        context.addValue("reUpdate", reUpdate);
-
-        AbstractAction action = actionBuilder.buildActionObject("SaveExchangeRate", context);
-        action.setContext(context);
-        try {
-            action.call();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private ExchangeRate calculateDifference(List<ExchangeRate> in) throws Exception {
-        Context c = new Context();
-        c.addValue("exchangeRates", in);
-
-        AbstractAction<ExchangeRate, Void> calcDifferenceAction = actionBuilder.buildActionObject("CalculateDifferenceCommand", c);
-        return calcDifferenceAction.call();
     }
 
     public static void main(String[] args) {
@@ -123,5 +81,14 @@ public class StartAction extends AbstractAction<Void, List<TableRowData>> {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public Map<String, Object> getInterBankData() throws Exception {
+        Context c = new Context();
+        c.addValue("exchangeNames", ((BankList) ConfigFacade.getInstance().getSystemProperty("bankList")).getExchangeList());
+        c.addValue("storage", ConfigFacade.getInstance().getSystemProperty("interBankDataStorage"));
+        c.addValue("banksRates", tableData.stream().map(TableRowData::getCurrentRate).collect(Collectors.toList()));
+        AbstractAction<Map<String, Object>, Void> action = ConfigFacade.getInstance().getActionBuilder().buildActionObject("getInterBankData", c);
+        return action.call();
     }
 }

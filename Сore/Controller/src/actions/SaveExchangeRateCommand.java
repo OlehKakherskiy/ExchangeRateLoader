@@ -101,7 +101,7 @@ public class SaveExchangeRateCommand extends AbstractAction<Void, Void> {
             Double sale = rate.getRate().get(currency + "#sale");
             if (buy != null && sale != null)
                 result.append("<").append(currency).append(" buy=\"").
-                        append(buy).append("\" sale=\"").append(sale).append("\"/>\n\t\t");
+                        append(String.format("%.3f", buy)).append(String.format("\" sale=\"%.3f",sale)).append("\"/>\n\t\t");
         }
         result.append("</exchangeRate>\n");
 //        result.delete(result.length() - 1, result.length());
@@ -110,7 +110,7 @@ public class SaveExchangeRateCommand extends AbstractAction<Void, Void> {
 
     public static void main(String[] args) {
         HashMap<String, Double> rate = new HashMap<>();
-        rate.put("USD#buy", 23.0);
+        rate.put("USD#buy", 23.666666666666666666);
         rate.put("USD#sale", 10.0);
         rate.put("EUR#buy", 30.0);
         rate.put("EUR#sale", 30.3);
@@ -122,7 +122,7 @@ public class SaveExchangeRateCommand extends AbstractAction<Void, Void> {
         c.addValue("reUpdate", true);
         c.addValue("currencyList", ((BankList) ConfigFacade.getInstance().getSystemProperty("bankList")).getExchangeList());
         c.addValue("storageFilePath", "data/banksStorage/1.xml");
-        AbstractAction s = ConfigFacade.getInstance().getActionBuilder().buildActionObject("SaveExchangeRate", c);
+        AbstractAction s = new SaveExchangeRateCommand();
         try {
             s.call();
         } catch (Exception e) {
