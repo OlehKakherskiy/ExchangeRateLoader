@@ -21,7 +21,6 @@ public class InterBankViewController {
         Map<String, Object> exchanges = (Map<String, Object>) ConfigFacade.getInstance().getSystemProperty("exchangesToShow");
         for (String key : exchanges.keySet())
             exchangeNames.add((String) exchanges.get(key));
-        System.out.println(exchangeNames);
     }
 
     @FXML
@@ -38,7 +37,7 @@ public class InterBankViewController {
         exchangeRates.getItems().clear();
         exchangeRates.getItems().addAll(exchangeNames);
         exchangeRates.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if(currentRate == null || diffRate == null)
+            if (currentRate == null || diffRate == null)
                 return;
             rateChanging.setText(getDiffRate(newValue));
             exchangeRateValue.setText(getRate(newValue));
@@ -50,17 +49,13 @@ public class InterBankViewController {
     private ExchangeRate diffRate;
 
     private String getRate(String exchangeName) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(currentRate.getRate().get(exchangeName + "#buy")).append("/").
-                append(currentRate.getRate().get(exchangeName + "#sale"));
-        return builder.toString();
+        return String.format("%.3f/%.3f", currentRate.getRate().get(exchangeName + "#buy"),
+                currentRate.getRate().get(exchangeName + "#sale"));
     }
 
     private String getDiffRate(String exchangeName) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(diffRate.getRate().get(exchangeName + "#buy")).append("/").
-                append(diffRate.getRate().get(exchangeName + "#sale")).append(" ").append(diffRate.getUpdateDate());
-        return builder.toString();
+        return String.format("%.3f/%.3f %s", diffRate.getRate().get(exchangeName + "#buy"),
+                diffRate.getRate().get(exchangeName + "#sale"), diffRate.getUpdateDate());
     }
 
     public void setCurrentRate(ExchangeRate currentRate) {

@@ -4,80 +4,71 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="148.0"
-         prefWidth="556.0" type="javafx.scene.layout.Pane" xmlns="http://javafx.com/javafx/8"
-         xmlns:fx="http://javafx.com/fxml/1">
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="148.0" prefWidth="556.0" type="javafx.scene.layout.Pane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <HBox layoutX="96.0" layoutY="93.0">
             <children>
-                <RadioButton layoutX="54.0" layoutY="85.0" mnemonicParsing="false" text="неделя">
+                <RadioButton layoutX="54.0" layoutY="85.0" mnemonicParsing="false" text="тиждень">
                     <toggleGroup>
-                        <ToggleGroup fx:id="historyGroup"/>
+                        <ToggleGroup fx:id="historyGroup" />
                     </toggleGroup>
                     <HBox.margin>
-                        <Insets right="10.0"/>
+                        <Insets right="10.0" />
                     </HBox.margin>
                 </RadioButton>
-                <RadioButton layoutX="135.0" layoutY="85.0" mnemonicParsing="false" text="месяц"
-                             toggleGroup="$historyGroup">
+                <RadioButton layoutX="135.0" layoutY="85.0" mnemonicParsing="false" text="місяць" toggleGroup="$historyGroup">
                     <HBox.margin>
-                        <Insets right="10.0"/>
+                        <Insets right="10.0" />
                     </HBox.margin>
                 </RadioButton>
-                <RadioButton layoutX="215.0" layoutY="85.0" mnemonicParsing="false" text="3 месяца"
-                             toggleGroup="$historyGroup">
+                <RadioButton layoutX="215.0" layoutY="85.0" mnemonicParsing="false" text="3 місяці" toggleGroup="$historyGroup">
                     <HBox.margin>
-                        <Insets right="10.0"/>
+                        <Insets right="10.0" />
                     </HBox.margin>
                 </RadioButton>
-                <RadioButton layoutX="309.0" layoutY="85.0" mnemonicParsing="false" text="6 месяцев"
-                             toggleGroup="$historyGroup">
+                <RadioButton layoutX="309.0" layoutY="85.0" mnemonicParsing="false" text="6 місяців" toggleGroup="$historyGroup">
                     <HBox.margin>
-                        <Insets right="10.0"/>
+                        <Insets right="10.0" />
                     </HBox.margin>
                 </RadioButton>
-                <RadioButton layoutX="406.0" layoutY="85.0" mnemonicParsing="false" text="год"
-                             toggleGroup="$historyGroup">
+                <RadioButton layoutX="406.0" layoutY="85.0" mnemonicParsing="false" text="рік" toggleGroup="$historyGroup">
                     <HBox.margin>
-                        <Insets right="10.0"/>
+                        <Insets right="10.0" />
                     </HBox.margin>
                 </RadioButton>
-                <RadioButton layoutX="466.0" layoutY="85.0" mnemonicParsing="false" text="всё время"
-                             toggleGroup="$historyGroup"/>
+                <RadioButton layoutX="466.0" layoutY="85.0" mnemonicParsing="false" text="весь час" toggleGroup="$historyGroup" />
             </children>
             <opaqueInsets>
-                <Insets/>
+                <Insets />
             </opaqueInsets>
         </HBox>
-        <Label layoutX="14.0" layoutY="88.0" text="Период">
+        <Label layoutX="14.0" layoutY="88.0" text="Період">
             <font>
-                <Font size="18.0"/>
+                <Font size="18.0" />
             </font>
         </Label>
-        <Button fx:id="showHistoryButton" layoutX="424.0" layoutY="114.0" mnemonicParsing="false" prefHeight="2.0"
-                prefWidth="118.0" text="Показать историю"/>
-        <Label layoutX="14.0" layoutY="14.0" text="Тип операции">
+        <Button fx:id="showHistoryButton" layoutX="424.0" layoutY="114.0" mnemonicParsing="false" prefHeight="2.0" prefWidth="118.0" text="Показати історію" />
+        <Label layoutX="14.0" layoutY="14.0" text="Тип операції">
             <font>
-                <Font size="18.0"/>
+                <Font size="18.0" />
             </font>
         </Label>
         <HBox layoutX="143.0" layoutY="19.0">
             <children>
-                <CheckBox fx:id="buy" layoutX="143.0" layoutY="19.0" mnemonicParsing="false" text="покупка">
+                <CheckBox fx:id="buy" layoutX="143.0" layoutY="19.0" mnemonicParsing="false" text="купівля">
                     <HBox.margin>
-                        <Insets right="10.0"/>
+                        <Insets right="10.0" />
                     </HBox.margin>
                 </CheckBox>
-                <CheckBox fx:id="sale" layoutX="220.0" layoutY="19.0" mnemonicParsing="false" text="продажа"/>
+                <CheckBox fx:id="sale" layoutX="220.0" layoutY="19.0" mnemonicParsing="false" text="продаж" />
             </children>
         </HBox>
-        <Label layoutX="14.0" layoutY="51.0" text="Название валюты">
+        <Label layoutX="14.0" layoutY="51.0" text="Назва валюти">
             <font>
-                <Font size="18.0"/>
+                <Font size="18.0" />
             </font>
         </Label>
-        <HBox fx:id="exchangeNameBox" layoutX="180.0" layoutY="56.0"/>
-        <CheckBox fx:id="interBankRate" layoutX="14.0" layoutY="118.0" mnemonicParsing="false"
-                  text="сравнить со средним курсом"/>
+        <HBox fx:id="exchangeNameBox" layoutX="180.0" layoutY="56.0" />
+        <CheckBox fx:id="interBankRate" layoutX="14.0" layoutY="118.0" mnemonicParsing="false" text="порівняти з середнім курсом" />
     </children>
 </fx:root>

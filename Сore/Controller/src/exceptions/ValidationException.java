@@ -1,10 +1,20 @@
 package exceptions;
 
-/**
- * Created by User on 13.05.2015.
- */
+
 public class ValidationException extends Exception {
-    public ValidationException(String s) {
-        super(s);
+
+    public ValidationException(String text, String paramName) {
+        super(text);
+        this.paramName = paramName;
+    }
+
+    public ValidationException(String text){
+        super(text);
+    }
+
+    private String paramName;
+
+    public String getParamName() {
+        return paramName;
     }
 }

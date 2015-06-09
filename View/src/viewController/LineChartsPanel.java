@@ -1,5 +1,6 @@
 package viewController;
 
+import annotation.HasAlsoErrorsText;
 import app.AbstractView;
 import configuration.ConfigFacade;
 import entity.Bank;
@@ -34,6 +35,7 @@ public class LineChartsPanel extends ScrollPane implements AbstractView<Map<Stri
     @FXML
     private BorderPane borderPane;
 
+    @HasAlsoErrorsText
     private Pane historyParamsController;
 
     private List<Bank> banks;
@@ -82,8 +84,8 @@ public class LineChartsPanel extends ScrollPane implements AbstractView<Map<Stri
             return "";
         StringBuilder builder = new StringBuilder(key.substring(0, specSymbol));
         if (key.substring(specSymbol + 1).compareTo("buy") == 0)
-            builder.append(" покупка");
-        else builder.append(" продажа");
+            builder.append(" купівля");
+        else builder.append(" продаж");
         return builder.toString();
     }
 
@@ -108,7 +110,7 @@ public class LineChartsPanel extends ScrollPane implements AbstractView<Map<Stri
     public void setNextView(AbstractView nextView) {
         Map<String, Object> map = new HashMap<>();
         map.put("nextTabClosingPolicy", true);
-        map.put("nextViewTitle", "История");
+        map.put("nextViewTitle", "Історія");
         map.put("closeLastAddedTag", true);
         ((AbstractView) ConfigFacade.getInstance().getSystemProperty("MainView")).updateView(map);
         ((AbstractView) ConfigFacade.getInstance().getSystemProperty("MainView")).setNextView(nextView);

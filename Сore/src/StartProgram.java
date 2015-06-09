@@ -9,9 +9,7 @@ import javafx.stage.Stage;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by User on 15.05.2015.
- */
+
 public class StartProgram extends Application {
 
     public static void main(String[] args) {

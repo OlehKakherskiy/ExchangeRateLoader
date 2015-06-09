@@ -1,5 +1,7 @@
 package viewController;
 
+import annotation.ErrorParam;
+import annotation.ShowError;
 import app.AbstractView;
 import app.Context;
 import app.Controller;
@@ -18,11 +20,15 @@ import javafx.scene.layout.Pane;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ChooseHistoryParamsController extends Pane implements AbstractView<HashMap<String, Object>> {
+@ShowError(list = {
+        @ErrorParam(contextElementName = "banks", errorMessage = "Оберіть один або декілька банків з таблиці"),
+        @ErrorParam(contextElementName = "dateCount", errorMessage = "Оберіть період, за який бажаєте побачити історію"),
+        @ErrorParam(contextElementName = "exchangeNames", errorMessage = "Оберіть валюту, історію змін якої бажаєте побачити"),
+})
+public class ChooseHistoryParamsController extends Pane implements AbstractView<Map<String, Object>> {
 
     @FXML
     private ToggleGroup historyGroup;
@@ -69,14 +75,18 @@ public class ChooseHistoryParamsController extends Pane implements AbstractView<
         } else if (!interBankRate.isSelected() && interBankPos != -1) {
             banks.remove(interBankPos);
         }
-        c.addValue("banks", banks);
+        if (banks.size() == 0)
+            c.addValue("banks", null);
+        else c.addValue("banks", banks);
         List<String> exchangeNames = new ArrayList<>();
         for (Node node : exchangeNameBox.getChildren()) {
             CheckBox checkBox = (CheckBox) node;
             if (checkBox.isSelected())
                 exchangeNames.add(checkBox.getText());
         }
-        c.addValue("exchangeNames", exchangeNames);
+        if (exchangeNames.size() == 0)
+            c.addValue("exchangeNames", null);
+        else c.addValue("exchangeNames", exchangeNames);
         c.addValue("startDate", LocalDate.now());
         Controller.getController().addRequest("ShowExchangeHistory", c);
         banks = null;
@@ -109,7 +119,7 @@ public class ChooseHistoryParamsController extends Pane implements AbstractView<
     }
 
     @Override
-    public void updateView(HashMap<String, Object> data) {
+    public void updateView(Map<String, Object> data) {
         if (data.get("banks") != null)
             banks = (List<Bank>) data.get("banks");
         if (data.get("requestSourceView") != null)

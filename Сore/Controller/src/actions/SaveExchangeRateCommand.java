@@ -4,14 +4,9 @@ import annotation.Action;
 import annotation.ContextAnnotation;
 import annotation.Parameter;
 import app.AbstractAction;
-import app.Context;
-import configuration.ConfigFacade;
-import entity.BankList;
 import entity.ExchangeRate;
 
 import java.io.*;
-import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
 
 @Action
@@ -106,27 +101,5 @@ public class SaveExchangeRateCommand extends AbstractAction<Void, Void> {
         result.append("</exchangeRate>\n");
 //        result.delete(result.length() - 1, result.length());
         return result.toString();
-    }
-
-    public static void main(String[] args) {
-        HashMap<String, Double> rate = new HashMap<>();
-        rate.put("USD#buy", 23.666666666666666666);
-        rate.put("USD#sale", 10.0);
-        rate.put("EUR#buy", 30.0);
-        rate.put("EUR#sale", 30.3);
-        rate.put("RUB#sale", 0.3);
-        rate.put("RUB#buy", 0.2);
-        ExchangeRate exchangeRate = new ExchangeRate(rate, LocalDate.now());
-        Context c = new Context();
-        c.addValue("exchangeRate", exchangeRate);
-        c.addValue("reUpdate", true);
-        c.addValue("currencyList", ((BankList) ConfigFacade.getInstance().getSystemProperty("bankList")).getExchangeList());
-        c.addValue("storageFilePath", "data/banksStorage/1.xml");
-        AbstractAction s = new SaveExchangeRateCommand();
-        try {
-            s.call();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }

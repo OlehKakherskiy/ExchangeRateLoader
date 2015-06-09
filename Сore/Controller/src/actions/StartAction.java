@@ -33,7 +33,6 @@ public class StartAction extends AbstractAction<Void, Map<String, Object>> {
     @Override
     public Void call() throws Exception {
         BankList list = (BankList) ConfigFacade.getInstance().getSystemProperty("bankList");
-        //TODO: оставить укрэксимбанк и сделать так, чтобы он возвращал историю
         tableData = Collections.synchronizedList(FXCollections.observableArrayList());
         for (Bank b : list.getBankList()) {
             parallels.submit(() -> {
@@ -42,8 +41,7 @@ public class StartAction extends AbstractAction<Void, Map<String, Object>> {
                     ExchangeRate currentRate = null;
                     try {
                         currentRate = loadExchangeRate(b, list.getExchangeList());
-                    } catch (Exception e) {
-                    } //TODO:
+                    } catch (Exception e) {}
 
                     TableRowData tableRowData = new TableRowData();
                     if (currentRate != null && currentRate.getRate().size() != 0) {
@@ -72,15 +70,6 @@ public class StartAction extends AbstractAction<Void, Map<String, Object>> {
         responseView.updateView(result);
         ((AbstractView) context.getValue("requestView")).setNextView(responseView);
         return null;
-    }
-
-    public static void main(String[] args) {
-        StartAction start = new StartAction();
-        try {
-            start.call();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public Map<String, Object> getInterBankData() throws Exception {

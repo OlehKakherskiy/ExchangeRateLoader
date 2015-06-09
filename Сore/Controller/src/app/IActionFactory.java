@@ -11,5 +11,5 @@ public interface IActionFactory {
 
     AbstractAction createAction(String ID, Context c) throws RequestException;
 
-    Map<String,Object> getActionProperties(String ID) throws RequestException;
+    Map<String, Object> getActionProperties(String ID) throws RequestException;
 }

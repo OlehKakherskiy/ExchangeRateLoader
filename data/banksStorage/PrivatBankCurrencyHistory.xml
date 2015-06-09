@@ -1,6 +1,11 @@
 <?xml version="1.0"?>
 <currencyHistory>
 	<lastUpdateCount>3</lastUpdateCount>
+	<exchangeRate date="2015-06-10">
+		<EUR buy="22,500" sale="25,000"/>
+		<USD buy="20,000" sale="22,000"/>
+		<RUB buy="0,370" sale="0,400"/>
+		</exchangeRate>
 	<exchangeRate date="2015-06-09">
 		<EUR buy="22,500" sale="25,000"/>
 		<USD buy="20,000" sale="22,000"/>

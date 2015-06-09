@@ -1,5 +1,6 @@
 package viewController;
 
+import annotation.HasAlsoErrorsText;
 import app.AbstractView;
 import configuration.ConfigFacade;
 import entity.Bank;
@@ -35,7 +36,8 @@ public class TableViewController extends ScrollPane implements AbstractView<Map<
     @FXML
     TableView tableView;
 
-    public Pane historyParamsPanel;
+    @HasAlsoErrorsText
+    public AbstractView<Map<String,Object>> historyParamsPanel;
 
     @FXML
     BorderPane borderPane;
@@ -60,31 +62,31 @@ public class TableViewController extends ScrollPane implements AbstractView<Map<
     public void setNextView(AbstractView nextView) {
         Map<String, Object> map = new HashMap<>();
         map.put("nextTabClosingPolicy", true);
-        map.put("nextViewTitle", "История");
+        map.put("nextViewTitle", "Історія");
         ((AbstractView) ConfigFacade.getInstance().getSystemProperty("MainView")).updateView(map);
         ((AbstractView) ConfigFacade.getInstance().getSystemProperty("MainView")).setNextView(nextView);
     }
 
     @Override
     public void init() throws RequestException {
-        historyParamsPanel = (Pane) ConfigFacade.getInstance().getViewFactory().createView("HistoryParamsView");
-        borderPane.setBottom(historyParamsPanel);
+        historyParamsPanel = ConfigFacade.getInstance().getViewFactory().createView("HistoryParamsView");
+        borderPane.setBottom((Pane)historyParamsPanel);
         Map<String, Object> map = new HashMap<>();
         map.put("requestSourceView", this);
-        ((AbstractView) historyParamsPanel).updateView(map);
+        historyParamsPanel.updateView(map);
         BorderPane.setAlignment(borderPane.getBottom(), Pos.CENTER);
-        TableColumn<TableRowData, Bank> banksNameColumn = new TableColumn<>("Название банка");
+        TableColumn<TableRowData, Bank> banksNameColumn = new TableColumn<>("Назва банку");
         banksNameColumn.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().getBank()));
-        TableColumn<TableRowData, LocalDate> dateColumn = new TableColumn<>("Дата обновления");
+        TableColumn<TableRowData, LocalDate> dateColumn = new TableColumn<>("Дата оновлення");
         dateColumn.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().getCurrentRate().getUpdateDate()));
         tableView.getColumns().addAll(banksNameColumn, dateColumn);
         tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         for (String exchange : exchangeNames.keySet()) {
             String exchangeName = (String) exchangeNames.get(exchange);
             TableColumn column = new TableColumn(exchangeName);
-            TableColumn<TableRowData, Number> buyColumn = new TableColumn<>("покупка");
-            TableColumn<TableRowData, Number> saleColumn = new TableColumn<>("продажа");
-            TableColumn<TableRowData, String> diffColumn = new TableColumn<>("изменение\nпокупка/продажа");
+            TableColumn<TableRowData, Number> buyColumn = new TableColumn<>("купівля");
+            TableColumn<TableRowData, Number> saleColumn = new TableColumn<>("продаж");
+            TableColumn<TableRowData, String> diffColumn = new TableColumn<>("зміна\nкупівля/продаж");
 
             diffColumn.setCellValueFactory(param1 -> new ReadOnlyObjectWrapper<>(getDifferenceRate(param1.getValue(), exchangeName)));
             buyColumn.setCellValueFactory(param1 -> new SimpleDoubleProperty(getExchangeRate(param1.getValue(), exchangeName, true, false)));

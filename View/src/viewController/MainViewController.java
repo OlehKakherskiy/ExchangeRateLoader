@@ -4,7 +4,6 @@ import app.AbstractView;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
@@ -55,8 +54,6 @@ public class MainViewController extends TabPane implements AbstractView<Map<Stri
             AnchorPane pane = new AnchorPane(borderPane);
             tab.contentProperty().setValue(pane);
             tabPane.getSelectionModel().select(tab);
-            XYChart.Data d = new XYChart.Data();
-            System.out.println(d.getNode());
         });
     }
 

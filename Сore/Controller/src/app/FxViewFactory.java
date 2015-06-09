@@ -3,6 +3,7 @@ package app;
 import configuration.ConfigFacade;
 import exceptions.RequestException;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -46,5 +47,13 @@ public class FxViewFactory implements IViewFactory {
             e.printStackTrace();
             throw new RequestException();
         }
+    }
+
+    @Override
+    public void showErrorMessage(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText("Помилка");
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

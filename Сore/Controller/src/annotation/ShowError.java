@@ -5,8 +5,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target(value = ElementType.TYPE)
+/**
+ * Created by User on 09.06.2015.
+ */
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ContextAnnotation {
-    Parameter[] list();
+public @interface ShowError {
+    ErrorParam[] list();
 }

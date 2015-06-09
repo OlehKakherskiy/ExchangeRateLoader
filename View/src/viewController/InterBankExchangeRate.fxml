@@ -5,20 +5,20 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 <?import java.lang.String?>
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="47.0" prefWidth="657.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="viewController.InterBankViewController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="47.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="viewController.InterBankViewController">
     <children>
-        <Label layoutX="14.0" layoutY="6.0" text="Средний курс по Украине" textAlignment="CENTER">
+        <Label layoutX="14.0" layoutY="6.0" text="Середній курс в Україні" textAlignment="CENTER">
             <font>
                 <Font size="18.0" />
             </font>
         </Label>
-        <Label fx:id="exchangeRateValue" layoutX="474.0" layoutY="10.0" prefHeight="5.0" prefWidth="126.0" textAlignment="CENTER">
+        <Label fx:id="exchangeRateValue" layoutX="474.0" layoutY="10.0" prefHeight="27.0" prefWidth="237.0" textAlignment="CENTER">
             <font>
                 <Font size="18.0" />
             </font>
         </Label>
-        <Label layoutX="68.0" layoutY="31.0" text="(покупка/продажа)" />
-        <Label fx:id="rateChanging" layoutX="474.0" layoutY="31.0" prefHeight="11.0" prefWidth="126.0" textAlignment="CENTER" />
+        <Label layoutX="68.0" layoutY="31.0" text="(купівля/продаж)" />
+        <Label fx:id="rateChanging" layoutX="474.0" layoutY="31.0" prefHeight="17.0" prefWidth="237.0" textAlignment="CENTER" />
         <ComboBox fx:id="exchangeRates" layoutX="300.0" layoutY="11.0" prefWidth="150.0">
             <items>
                 <FXCollections fx:factory="observableArrayList">

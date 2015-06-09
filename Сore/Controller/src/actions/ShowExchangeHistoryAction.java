@@ -8,7 +8,6 @@ import app.AbstractView;
 import app.Context;
 import configuration.ConfigFacade;
 import entity.Bank;
-import entity.BankList;
 import entity.DateCount;
 import entity.ExchangeRate;
 
@@ -81,22 +80,4 @@ public class ShowExchangeHistoryAction extends AbstractAction<Void, Map<String, 
         return rate;
     }
 
-
-    public static void main(String[] args) {
-        Context c = new Context();
-        c.addValue("dateCount", DateCount.Week);
-        c.addValue("readBuyValue", true);
-        c.addValue("readSaleValue", true);
-        BankList l = (BankList) ConfigFacade.getInstance().getSystemProperty("bankList");
-        c.addValue("banks", l.getBankList());
-        c.addValue("exchangeNames", l.getExchangeList());
-        c.addValue("startDate", LocalDate.now());
-        ShowExchangeHistoryAction l1 = new ShowExchangeHistoryAction();
-        l1.setContext(c);
-        try {
-            l1.call();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }
